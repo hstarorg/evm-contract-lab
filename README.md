@@ -54,6 +54,12 @@ After setting the variable, you can run the deployment with the Sepolia network:
 pnpm hh ignition deploy --network sepolia ignition/modules/Counter.ts
 ```
 
+### Verify Contracts
+> https://hardhat.org/hardhat3-alpha/learn-more/smart-contract-verification
+```bash
+pnpm verify --network sepolia <contract address>
+```
+
 ---
 
 Feel free to explore the project and provide feedback on your experience with Hardhat 3 Alpha!
