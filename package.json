@@ -3,11 +3,13 @@
   "type": "module",
   "version": "1.0.0",
   "scripts": {
-    "test": "hardhat test",
+    "test": "hardhat test nodejs",
     "test:sol": "hardhat test solidity",
     "test:node": "hardhat test nodejs",
-    "hh": "pnpm hardhat",
-    "ks": "pnpm hardhat keystore"
+    "hh": "hardhat",
+    "ks": "hardhat keystore",
+    "compile": "hardhat compile",
+    "local-node": "hardhat node"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition": "3.0.0-next.21",
@@ -17,5 +19,10 @@
     "hardhat": "3.0.0-next.21",
     "typescript": "~5.8.3",
     "viem": "^2.31.7"
+  },
+  "dependencies": {
+    "@fhevm/solidity": "^0.7.0",
+    "@zama-fhe/oracle-solidity": "^0.1.0",
+    "@zama-fhe/relayer-sdk": "^0.1.0"
   }
 }

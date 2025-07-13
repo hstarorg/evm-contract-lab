@@ -19,4 +19,4 @@
 # Hardhat coverage reports
 /coverage
 
-old/
+deployments/

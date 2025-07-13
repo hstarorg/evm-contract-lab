@@ -1,7 +1,7 @@
-import type { HardhatUserConfig } from "hardhat/config";
+import type { HardhatUserConfig } from 'hardhat/config';
 
-import hardhatToolboxViemPlugin from "@nomicfoundation/hardhat-toolbox-viem";
-import { configVariable } from "hardhat/config";
+import hardhatToolboxViemPlugin from '@nomicfoundation/hardhat-toolbox-viem';
+import { configVariable } from 'hardhat/config';
 
 const config: HardhatUserConfig = {
   /*
@@ -26,7 +26,7 @@ const config: HardhatUserConfig = {
        * in the CLI or by the tasks you are running.
        */
       default: {
-        version: "0.8.28",
+        version: '0.8.28',
       },
       /*
        * The production profile is meant to be used for deployments, providing
@@ -34,7 +34,7 @@ const config: HardhatUserConfig = {
        * steps to simplify the process of verifying your contracts.
        */
       production: {
-        version: "0.8.28",
+        version: '0.8.28',
         settings: {
           optimizer: {
             enabled: true,
@@ -65,18 +65,23 @@ const config: HardhatUserConfig = {
    */
   networks: {
     hardhatMainnet: {
-      type: "edr",
-      chainType: "l1",
+      type: 'edr',
+      chainType: 'l1',
     },
     hardhatOp: {
-      type: "edr",
-      chainType: "optimism",
+      type: 'edr',
+      chainType: 'optimism',
+    },
+    local: {
+      type: 'http',
+      chainType: 'l1',
+      url: 'http://127.0.0.1:8545',
     },
     sepolia: {
-      type: "http",
-      chainType: "l1",
-      url: configVariable("SEPOLIA_RPC_URL"),
-      accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
+      type: 'http',
+      chainType: 'l1',
+      url: configVariable('SEPOLIA_RPC_URL'),
+      accounts: [configVariable('SEPOLIA_PRIVATE_KEY')],
     },
   },
 };
