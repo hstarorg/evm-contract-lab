@@ -27,6 +27,16 @@ pnpm test:sol
 pnpm test:node # default, alias pnpm test
 ```
 
+### Compile
+
+```bash
+# Compile all contracts
+pnpm compile
+
+# Compile special contract
+pnpm compile ./contracts/fhevm-zama/FHEGuessNumberGame.sol
+```
+
 ### Make a deployment to Sepolia
 
 This project includes an example Ignition module to deploy the contract. You can deploy this module to a locally simulated chain or to Sepolia.
@@ -55,7 +65,9 @@ pnpm hh ignition deploy --network sepolia ignition/modules/Counter.ts
 ```
 
 ### Verify Contracts
+
 > https://hardhat.org/hardhat3-alpha/learn-more/smart-contract-verification
+
 ```bash
 pnpm verify --network sepolia <contract address>
 ```
