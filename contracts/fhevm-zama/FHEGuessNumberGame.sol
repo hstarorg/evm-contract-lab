@@ -36,7 +36,11 @@ contract FHEGuessNumberGame is SepoliaConfig {
 
     // Events
     event GameCreated(uint256 indexed gameId, address indexed creator);
-    event PlayerGuessed(uint256 indexed gameId, address indexed player, uint8 guessIdx);
+    event PlayerGuessed(
+        uint256 indexed gameId,
+        address indexed player,
+        uint8 guessIdx
+    );
 
     // Storage
     mapping(uint256 => Game) public games;
@@ -47,7 +51,10 @@ contract FHEGuessNumberGame is SepoliaConfig {
         bytes calldata inputProof,
         uint8 ddl
     ) external returns (uint256) {
-        require(ddl == 1 || ddl == 6 || ddl == 12 || ddl == 24, "Invalid ddl value");
+        require(
+            ddl == 1 || ddl == 6 || ddl == 12 || ddl == 24,
+            "Invalid ddl value"
+        );
 
         uint256 gameId = ++gameCounter;
 
@@ -68,7 +75,10 @@ contract FHEGuessNumberGame is SepoliaConfig {
     }
 
     function createGame(uint8 ddl) external returns (uint256) {
-        require(ddl == 1 || ddl == 6 || ddl == 12 || ddl == 24, "Invalid ddl value");
+        require(
+            ddl == 1 || ddl == 6 || ddl == 12 || ddl == 24,
+            "Invalid ddl value"
+        );
 
         uint256 gameId = ++gameCounter;
 
@@ -88,10 +98,21 @@ contract FHEGuessNumberGame is SepoliaConfig {
         return gameId;
     }
 
-    function guess(uint256 gameId, externalEuint8 encryptedGuess, bytes calldata inputProof) external {
+    function guess(
+        uint256 gameId,
+        externalEuint8 encryptedGuess,
+        bytes calldata inputProof
+    ) external {
         Game storage game = games[gameId];
-        require(game.status != GameStatus.Processing, "Game status is updating");
-        require(game.status != GameStatus.WinAndEnded && game.status != GameStatus.Ended, "Game already ended");
+        require(
+            game.status != GameStatus.Processing,
+            "Game status is updating"
+        );
+        require(
+            game.status != GameStatus.WinAndEnded &&
+                game.status != GameStatus.Ended,
+            "Game already ended"
+        );
         require(game.ddl > block.timestamp, "Game ddl reached, cannot guess");
         require(game.guessed[msg.sender] == false, "You have already guessed");
 
@@ -102,7 +123,10 @@ contract FHEGuessNumberGame is SepoliaConfig {
         // record guess item
 
         uint8 idx = game.guessCount;
-        game.guesses[idx] = GuessItem({guessValue: guessValue, player: msg.sender});
+        game.guesses[idx] = GuessItem({
+            guessValue: guessValue,
+            player: msg.sender
+        });
         game.guessed[msg.sender] = true;
         game.guessCount++;
         emit PlayerGuessed(gameId, msg.sender, idx);
@@ -110,18 +134,26 @@ contract FHEGuessNumberGame is SepoliaConfig {
         // update guess result
         ebool correct = FHE.eq(guessValue, game.answer);
         uint256 requestId = _requestDecryptBool(gameId, correct);
-        requestMapping[requestId] = ReqeustItem({player: msg.sender, gameId: gameId});
+        requestMapping[requestId] = ReqeustItem({
+            player: msg.sender,
+            gameId: gameId
+        });
         game.status = GameStatus.Processing;
     }
 
     function endGame(uint256 gameId) external {
         require(msg.sender == games[gameId].creator, "Not creator");
-        require(games[gameId].ddl < block.timestamp, "Deadline not reached, cannot close game");
+        require(
+            games[gameId].ddl < block.timestamp,
+            "Deadline not reached, cannot close game"
+        );
         games[gameId].status = GameStatus.Ended;
         _publicAnswerAndGuesses(gameId);
     }
 
-    function getGuesses(uint256 gameId) external view returns (GuessItem[] memory) {
+    function getGuesses(
+        uint256 gameId
+    ) external view returns (GuessItem[] memory) {
         Game storage game = games[gameId];
         require(game.ddl != 0, "Game does not exist");
         GuessItem[] memory guesses = new GuessItem[](game.guessCount);
@@ -131,18 +163,34 @@ contract FHEGuessNumberGame is SepoliaConfig {
         return guesses;
     }
 
-    function _requestDecryptBool(uint256 gameId, ebool correct) private returns (uint256) {
-        require(games[gameId].status == GameStatus.Active, "Game is not active");
+    function _requestDecryptBool(
+        uint256 gameId,
+        ebool correct
+    ) private returns (uint256) {
+        require(
+            games[gameId].status == GameStatus.Active,
+            "Game is not active"
+        );
         bytes32[] memory cts = new bytes32[](1);
         cts[0] = FHE.toBytes32(correct);
-        uint256 latestRequestId = FHE.requestDecryption(cts, this.decryptGuessResultCallback.selector);
+        uint256 latestRequestId = FHE.requestDecryption(
+            cts,
+            this.decryptGuessResultCallback.selector
+        );
         return latestRequestId;
     }
 
-    function decryptGuessResultCallback(uint256 requestId, bool guessCorrect, bytes[] memory signatures) public {
+    function decryptGuessResultCallback(
+        uint256 requestId,
+        bool guessCorrect,
+        bytes[] memory signatures
+    ) public {
         ReqeustItem memory requestItem = requestMapping[requestId];
         Game storage game = games[requestItem.gameId];
-        require(requestItem.gameId > 0 && game.status == GameStatus.Processing, "Invalid requestId");
+        require(
+            requestItem.gameId > 0 && game.status == GameStatus.Processing,
+            "Invalid requestId"
+        );
 
         FHE.checkSignatures(requestId, signatures);
 
