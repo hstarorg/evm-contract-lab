@@ -5,7 +5,7 @@ import { useAccount, useWalletClient } from 'wagmi';
 import { setWalletClientToContractClient } from '@/services/guess-game.service';
 import { initFhevmClient } from '@/services/fhe.service';
 import type { WalletClient } from 'viem';
-import { globalViewModel } from '@/GlobalViewModel';
+import { globalViewModel } from '@/globalViewModel';
 
 export function MainLayout() {
   const account = useAccount();
