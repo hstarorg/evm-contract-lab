@@ -95,3 +95,12 @@ export async function guessGame(gameId: number, handle: Hex, inputProof: Hex) {
 
   return true;
 }
+
+export async function getGuessList(gameId: number) {
+  if (gameId <= 0) {
+    throw new Error('Invalid game ID');
+  }
+  console.log('Fetching guess list for game ID:', gameId);
+  const res = await contractClient.getGuesses(BigInt(gameId));
+  return res;
+}

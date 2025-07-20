@@ -1,5 +1,6 @@
 import { Loader } from 'lucide-react';
 import { useState } from 'react';
+import { zeroAddress } from 'viem';
 
 import {
   AlertDialog,
@@ -17,6 +18,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { UIGameItem } from '@/types/game-types';
 import { formatDateFromUnixTimestamp, shortAddress } from '@/utils';
+import { GameGuessRecord } from './GameGuessRecord';
 
 export type GameCardProps = {
   game: UIGameItem;
@@ -52,6 +54,7 @@ export function GameCard(props: GameCardProps) {
     String(Math.floor(Math.random() * 255))
   );
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const [detailShown, setDetailShown] = useState(false);
 
   async function handleConfirm() {
     try {
@@ -68,6 +71,8 @@ export function GameCard(props: GameCardProps) {
   const statusInfo = getFinalStatusInfo(game.status, game.ddl);
   const isOwner = accountAddress === game.creator;
   const guessAvailable = game.status === 0 && !statusInfo.needEndButton;
+  const gameWinner =
+    game.winner === zeroAddress ? 'No Winner Yet' : shortAddress(game.winner);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
@@ -97,7 +102,15 @@ export function GameCard(props: GameCardProps) {
           ) : null}
         </p>
         <p>Deadline: {formatDateFromUnixTimestamp(game.ddl)}</p>
-        <p>Player Count: {game.guessCount}</p>
+        <p>
+          Player Count: <strong>{game.guessCount}</strong>&nbsp;
+          <Button variant="link" size="sm" onClick={() => setDetailShown(true)}>
+            Show Detail
+          </Button>
+        </p>
+        <p>
+          Winner: <strong>{gameWinner}</strong>
+        </p>
       </div>
 
       <AlertDialog open={dialogOpen}>
@@ -147,6 +160,13 @@ export function GameCard(props: GameCardProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+      {detailShown ? (
+        <GameGuessRecord
+          gameId={game.id}
+          ended={game.status === 2 || game.status === 3}
+          onClose={() => setDetailShown(false)}
+        />
+      ) : null}
     </div>
   );
 }

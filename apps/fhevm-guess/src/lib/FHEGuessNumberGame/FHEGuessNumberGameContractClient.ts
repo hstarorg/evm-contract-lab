@@ -96,7 +96,7 @@ export class FHEGuessNumberGameContractClient extends ContractClientBase<
 
   async getGuesses(gameId: bigint) {
     const guesses = (await this.readContract({
-      functionName: 'guesses',
+      functionName: 'getGuesses',
       args: [gameId],
     })) as { player: string; guessValue: string }[];
     const guessMap = guesses.reduce((acc: Record<string, string>, item) => {

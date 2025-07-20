@@ -9,7 +9,10 @@ export async function initFhevmClient(
   walletClient: WalletClient
 ): Promise<void> {
   await fhevmClient.init(AppConf.contractAddress as Address, 1, walletClient);
-  console.log('FHEVM client initialized with contract address:', AppConf.contractAddress);
+  console.log(
+    'FHEVM client initialized with contract address:',
+    AppConf.contractAddress
+  );
 }
 
 export async function fhevmUserEncrypt(
@@ -23,5 +26,6 @@ export async function fhevmUserDecrypt(handle: string) {
 }
 
 export async function fhevmPublicDecrypt(handles: string[]) {
-  return fhevmClient.publicDecrypt(handles);
+  const values = await fhevmClient.publicDecrypt(handles);
+  return handles.map((x) => values[x]);
 }
