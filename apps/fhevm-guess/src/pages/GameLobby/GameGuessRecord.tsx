@@ -32,7 +32,7 @@ export function GameGuessRecord(props: GameGuessRecordProps) {
   useMounted(async () => {
     const res = await getGuessList(gameId);
     setLoaded(true);
-    const guesses = res.guesses.concat(res.guesses);
+    const guesses = res.guesses;
     if (ended) {
       const guessValues = await fhevmPublicDecrypt(
         guesses.map((x) => x.guessValue)
@@ -44,7 +44,7 @@ export function GameGuessRecord(props: GameGuessRecordProps) {
 
   return (
     <Drawer open direction="right" onClose={onClose}>
-      <DrawerContent>
+      <DrawerContent className="!max-w-[550px]">
         <DrawerHeader className="border-b">
           <DrawerTitle>Guess Detail</DrawerTitle>
           <DrawerDescription>Show all guess records</DrawerDescription>
@@ -63,7 +63,8 @@ export function GameGuessRecord(props: GameGuessRecordProps) {
                   <strong>{shortAddress(x.player)}</strong> Guessed
                 </div>
                 <div className="px-2">
-                  {ended ? x.guessValue : 'Decrypt After Ends'}
+                  Guess Value:&nbsp;
+                  <strong>{ended ? x.guessValue : 'Decrypt After Ends'}</strong>
                 </div>
               </div>
             );

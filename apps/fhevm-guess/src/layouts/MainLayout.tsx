@@ -4,14 +4,23 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useAccount, useWalletClient } from 'wagmi';
 import { setWalletClientToContractClient } from '@/services/guess-game.service';
 import { initFhevmClient } from '@/services/fhe.service';
+import type { WalletClient } from 'viem';
+import { globalViewModel } from '@/GlobalViewModel';
 
 export function MainLayout() {
   const account = useAccount();
   const { data: walletClient } = useWalletClient();
+  const globalVmData = globalViewModel.$useSnapshot();
+
+  async function initWithWalletClient(wc: WalletClient) {
+    setWalletClientToContractClient(wc);
+    await initFhevmClient(wc);
+    globalViewModel.setFhevmInitialized(true);
+  }
+
   useEffect(() => {
     if (walletClient) {
-      setWalletClientToContractClient(walletClient);
-      initFhevmClient(walletClient);
+      initWithWalletClient(walletClient);
     }
   }, [walletClient]);
 
@@ -19,10 +28,26 @@ export function MainLayout() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex flex-col">
       <header className="bg-white shadow-sm border-b sticky top-0">
         <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-          <Link to="/lobby" className="flex items-center space-x-2">
-            <img src="/logo.svg" alt="Logo" className="w-8 h-8" />
-            <h1 className="text-2xl font-bold text-gray-900">FHEVM GUESS</h1>
-          </Link>
+          <div className="flex items-center space-x-2">
+            <Link to="/lobby" className="flex items-center space-x-2">
+              <img src="/logo.svg" alt="Logo" className="w-8 h-8" />
+              <h1 className="text-2xl font-bold text-gray-900">FHEVM GUESS</h1>
+            </Link>
+            <span>
+              {globalVmData.fhevmInitialized ? (
+                <span className="text-green-500 font-bold">
+                  FHEVM Initialized
+                </span>
+              ) : (
+                <div className="text-red-500">
+                  <span>FHEVM Initializing</span>
+                  <div className="text-xs leading-1">
+                    Please operate after initialization is completed
+                  </div>
+                </div>
+              )}
+            </span>
+          </div>
 
           <nav className="flex space-x-6">
             {/* <Link

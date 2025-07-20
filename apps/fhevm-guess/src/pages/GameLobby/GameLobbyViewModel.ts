@@ -65,7 +65,8 @@ export class GameLobbyViewModel {
   };
 
   endGame = async (id: number) => {
-    endGuessGame(id);
+    await endGuessGame(id);
+    this.loadGames();
   };
 
   guessGame = async (gameId: number, guessValue: string): Promise<boolean> => {
@@ -77,6 +78,8 @@ export class GameLobbyViewModel {
     const inputProof = bytesToHex(encrypted.inputProof as Uint8Array);
 
     console.log(encrypted, 'encrypted guess input');
-    return await guessGame(gameId, handle, inputProof);
+    const result = await guessGame(gameId, handle, inputProof);
+    this.loadGames();
+    return result;
   };
 }
