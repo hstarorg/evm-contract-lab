@@ -62,6 +62,10 @@ After setting the variable, you can run the deployment with the Sepolia network:
 
 ```shell
 pnpm hh ignition deploy --network sepolia ignition/modules/Counter.ts
+
+# clean old deployment
+pnpm hh ignition wipe <deploymentId> <futureId>
+pnpm hh ignition wipe "chain-11155111" "FHEGuessNumberGame#FHEGuessNumberGame"
 ```
 
 ### Verify Contracts

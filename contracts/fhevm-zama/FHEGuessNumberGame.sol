@@ -46,34 +46,6 @@ contract FHEGuessNumberGame is SepoliaConfig {
     mapping(uint256 => Game) public games;
     mapping(uint256 => ReqeustItem) private requestMapping;
 
-    function createGameOld(
-        externalEuint8 encryptedAnswer,
-        bytes calldata inputProof,
-        uint8 ddl
-    ) external returns (uint256) {
-        require(
-            ddl == 1 || ddl == 6 || ddl == 12 || ddl == 24,
-            "Invalid ddl value"
-        );
-
-        uint256 gameId = ++gameCounter;
-
-        euint8 answer = FHE.fromExternal(encryptedAnswer, inputProof);
-
-        Game storage game = games[gameId];
-        game.creator = msg.sender;
-        game.answer = answer;
-        game.guessCount = 0;
-        game.ddl = block.timestamp + ddl * 1 hours; // Set a deadline for the game
-        game.status = GameStatus.Active;
-
-        FHE.allowThis(answer);
-        FHE.allow(answer, msg.sender);
-
-        emit GameCreated(gameId, msg.sender);
-        return gameId;
-    }
-
     function createGame(uint8 ddl) external returns (uint256) {
         require(
             ddl == 1 || ddl == 6 || ddl == 12 || ddl == 24,
