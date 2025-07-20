@@ -2,6 +2,7 @@
   "name": "fhevm-guess",
   "compatibility_date": "2025-07-20",
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "not_found_handling": "single-page-application"
   }
 }
