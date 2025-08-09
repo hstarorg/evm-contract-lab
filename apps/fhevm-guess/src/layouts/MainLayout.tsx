@@ -31,7 +31,7 @@ export function MainLayout() {
           <div className="flex items-center space-x-2">
             <Link to="/lobby" className="flex items-center space-x-2">
               <img src="/logo.svg" alt="Logo" className="w-8 h-8" />
-              <h1 className="text-2xl font-bold text-gray-900">FHEVM GUESS</h1>
+              <h1 className="text-2xl font-bold text-gray-900">GuessGo</h1>
             </Link>
             <span>
               {globalVmData.fhevmInitialized ? (
@@ -50,6 +50,14 @@ export function MainLayout() {
           </div>
 
           <nav className="flex space-x-6">
+            <a
+              href="https://github.com/hstarorg/evm-contract-lab/tree/main/apps/fhevm-guess"
+              rel="noopener noreferrer"
+              target="_blank"
+              className=" leading-[40px] text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+            >
+              Source Code
+            </a>
             {/* <Link
               to="/lobby"
               className={`text-sm font-medium transition-colors ${
